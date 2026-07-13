@@ -69,7 +69,7 @@ def buscar_codigo(codigo):
 
 def actualizar_precio(codigo, nuevo_precio, reservas):
     if buscar_codigo(codigo):
-        reservas[codigo] = nuevo_precio[codigo][1]
+        reservas[codigo.upper()][0] = nuevo_precio
         return True
     return False
 
