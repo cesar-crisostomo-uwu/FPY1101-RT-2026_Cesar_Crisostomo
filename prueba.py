@@ -72,8 +72,67 @@ def actualizar_precio(codigo, nuevo_precio, reservas):
         reservas[codigo.upper()][0] = nuevo_precio
         return True
     return False
+  
+def validar_codigo():
+    return codigo.strip() != "" and not buscar_codigo (codigo)
 
+def validar_nombre(nombre):
+    return nombre.strip() != ""
+
+def validar_escuela(escuela):
+    return escuela.lower in ['elemental' , 'arcana' , 'oscura']
+
+def validar_poder(poder):
+    try:
+        poder = int(poder)
+        return poder > 0
+    except ValueError:
+        return False
+
+def validar_rareza(rareza):
+    return rareza.upper() in ['S', 'R', 'L']
+
+def validar_es_prohibido(es_prohibido):
+    return es_prohibido.lower() in ['s','n']
+
+def validar_creador(creador):
+    return creador.strip() != ""
+
+def validar_precio(precio):
+    try:
+        precio = int(precio)
+        return precio > 0
+    except ValueError:
+        return False
     
+def validar_stock(stock):
+    try:
+        stock = int(stock)
+        return stock > 0
+    except ValueError:
+        return False
+
+# poder y valor se pueden reemplazar por
+def valida_mayo_cero(valor):
+    try:
+        valor = int(valor)
+        return valor > 0
+    except ValueError:
+        return False
+
+def agregar_hechizo(codigo, nombre, escuela, poder, rareza, es_prohibido, creador, precio, stock, hechizos, reservas):
+    if buscar_codigo(codigo):
+        return False
+    
+    hechizos[codigo] = [nombre, escuela, poder, rareza, es_prohibido, creador]
+    reservas[codigo] = [precio, stock]
+    return True
+
+
+
+
+
+
 
 while True:
 
@@ -115,6 +174,66 @@ while True:
                     break
             except ValueError:
                 print("debe ingresar un valor entero para el precio.")
+    elif opcion == 4:
+        # Peticiones ordenadas con sus correspondientes mensajes de error
+        codigo = input("Ingrese código del hechizo: ")
+        if not validar_codigo(codigo, hechizos):
+            print("Error: código inválido o ya existe")
+            continue
+
+        nombre = input("Ingrese nombre: ")
+        if not validar_nombre(nombre):
+            print("Error: nombre inválido")
+            continue
+
+        escuela = input("Ingrese escuela: ")
+        if not validar_escuela(escuela):
+            print("Error: escuela inválida")
+            continue
+         
+        poder = input("Ingrese poder: ")
+        if not validar_poder(poder):
+            print("Error: poder inválido")
+            continue
+
+        rareza = input("Ingrese rareza: ")
+        if not validar_rareza(rareza):
+            print("Error: rareza inválida")
+            continue
+
+        es_prohibido = input("¿Es prohibido? (s/n): ")
+        if not validar_es_prohibido(es_prohibido):
+            print("Error: opción inválida")
+            continue
+
+        creador = input("Ingrese creador: ")
+        if not validar_creador(creador):
+            print("Error: creador inválido")
+            continue
+
+        precio = input("Ingrese precio: ")
+        if not validar_precio(precio):
+            print("Error: precio inválido")
+            continue
+
+        stock = input("Ingrese stock: ")
+        if not validar_stock(stock):
+            print("Error: stock inválido")
+            continue
+
+        # Convertimos 's' o 'n' al booleano True o False que almacena el sistema
+        bool_prohibido = True if es_prohibido.lower() == 's' else False
+
+        if agregar_hechizo(codigo, nombre, escuela, poder, rareza, bool_prohibido, creador, precio, stock, hechizos, reservas):
+            print("Hechizo agregado")
+        else:
+            print("El código ya existe")
+    elif opcion == 5:
+        codigo = input("Ingrese el código del hechizo: ")
+        if eliminar_hechizo(codigo, hechizos, reservas):
+            print("Hechizo eliminado")
+        else:
+            print("El código no existe")
     elif opcion == 6:
         print("Saliendo del programa...")
         break
