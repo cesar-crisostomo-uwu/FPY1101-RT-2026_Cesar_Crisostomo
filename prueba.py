@@ -34,7 +34,6 @@ def leer_opcion ():
             print("Debe seleccionar una opción válida")
             return 0
         else:
-            print("Debe seleccionar una opción válida")
             return opcion
     except ValueError:
         print("Debe seleccionar una opción válida")
@@ -65,6 +64,16 @@ def busqueda_precio(precio_min, precio_max, hechizos, reservas):
     else:
         print("no hay hechizos en ese rango de precios")
 
+def buscar_codigo(codigo):
+    return codigo.upper() in reservas
+
+def actualizar_precio(codigo, nuevo_precio, reservas):
+    if buscar_codigo(codigo):
+        reservas[codigo] = nuevo_precio[codigo][1]
+        return True
+    return False
+
+    
 
 while True:
 
@@ -74,7 +83,6 @@ while True:
 
         escuela = input("ingrese la escuela de magia:>")
         pergaminos_escuela(escuela, hechizos, reservas)
-
     elif opcion == 2:
         while True:
             try:
@@ -87,7 +95,26 @@ while True:
                     break
             except ValueError:
                 print("Debe ingresar valores enteros")
-
-        
-
-    
+    elif opcion == 3:
+        while True:
+            try:
+                codigo = input("ingrese el codigo del hechizo:>")
+                if not buscar_codigo(codigo):
+                    print("El codigo no existe.")
+                else:
+                    nuevo_precio = int(input("Ingrese el nuevo precio.:"))
+                    if nuevo_precio < 0:
+                        print("el precio debe ser un valor positivo.")
+                    else:
+                        if actualizar_precio(codigo, nuevo_precio, reservas):
+                            print("precio actualizado")
+                        else:
+                            print("El codigo no existe")
+                respuesta = input("¿Desea actualizar otro precio (s/n)? ")
+                if respuesta.lower() == "n":
+                    break
+            except ValueError:
+                print("debe ingresar un valor entero para el precio.")
+    elif opcion == 6:
+        print("Saliendo del programa...")
+        break
