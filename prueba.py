@@ -39,7 +39,7 @@ def leer_opcion ():
     except ValueError:
         print("Debe seleccionar una opción válida")
         return 0 
-    
+
 def pergaminos_escuela(escuela, hechizos, reservas):
     print(f"pergaminos disponibles para la escuela de magia '{escuela}':")
     contador_pergamino_escuela = 0
@@ -49,7 +49,21 @@ def pergaminos_escuela(escuela, hechizos, reservas):
             contador_pergamino_escuela += reservas[codigo][1]
     print(f"El total de pergaminos para la escuela {codigo}, es de  {contador_pergamino_escuela}")        
 
+def busqueda_precio(precio_min, precio_max, hechizos, reservas):
+    hechizos_en_rango = []
 
+    for codigo, datos in hechizos.items():
+        precio, stock = reservas[codigo]
+        if precio_min <= precio <= precio_max and stock > 0:
+            hechizos_en_rango.append(f"{datos[0]}--{codigo}")
+
+    if hechizos_en_rango:
+        hechizos_en_rango.sort()
+        print("hechizos disponibles en el rango de precios")
+        for hechizo in hechizos_en_rango:
+            print(hechizo)
+    else:
+        print("no hay hechizos en ese rango de precios")
 
 
 while True:
@@ -60,3 +74,20 @@ while True:
 
         escuela = input("ingrese la escuela de magia:>")
         pergaminos_escuela(escuela, hechizos, reservas)
+
+    elif opcion == 2:
+        while True:
+            try:
+                precio_min = int(input("ingrese el precio minimo:>"))
+                precio_max = int(input("ingrese el precio maximo:>"))
+                if precio_min < 0 or precio_max < 0 or precio_min > precio_max:
+                    print("debe ingresar valores validos para la busqueda de precios")
+                else:
+                    busqueda_precio(precio_min, precio_max, hechizos, reservas)
+                    break
+            except ValueError:
+                print("Debe ingresar valores enteros")
+
+        
+
+    
